@@ -1,10 +1,10 @@
-name: Android Build
+name: Android Build (MVP - No Rust)
 
 on:
   push:
-    branches: [master]
+    branches: [mvp-sem-rust]
   pull_request:
-    branches: [master]
+    branches: [mvp-sem-rust]
 
 jobs:
   build:
@@ -26,26 +26,6 @@ jobs:
           cmdline-tools-version: latest
           platforms: android-35
           build-tools: 35.0.0
-
-      - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          targets: aarch64-linux-android
-
-      - name: Install cargo-ndk
-        run: |
-          cargo install cargo-ndk
-
-      - name: Build Rust crate for aarch64-linux-android
-        run: |
-          cd internet-optimizer-rust
-          cargo ndk -t arm64-v8a -o ../app/src/main/jniLibs/arm64-v8a build --release
-
-      - name: Copy .so to jniLibs
-        run: |
-          mkdir -p app/src/main/jniLibs/arm64-v8a
-          cp target/aarch64-linux-android/release/libtun_interface.so app/src/main/jniLibs/arm64-v8a/
 
       - name: Build Android APK
         run: |

@@ -9,19 +9,10 @@ import kotlinx.coroutines.withContext
 /**
  * Manages the lifecycle of the local VPN tunnel.
  *
- * This class orchestrates the VpnService TUN creation and the native
- * Rust tunnel engine. It exposes tunnel state as LiveData so the UI
- * can react to on/off changes.
- *
- * Key responsibilities:
- * - Ask [OptimizerVpnService] to establish the TUN interface.
- * - Initialize and run the native tunnel engine (Rust).
- * - Manage the foreground service notification.
- * - Handle graceful shutdown on service stop.
- *
- * The tunnel runs on a background coroutine (Dispatchers.IO). The native
- * [NativeTunnel.runTunnel] call blocks, so we invoke it via
- * [withContext(Dispatchers.IO)].
+ * MVP: TunnelManager is temporarily stubbed to return
+ * [TunnelStatus.Stopped] since the native Rust tunnel
+ * is not available in this phase. The UI layer still
+ * works and responds to toggle gestures.
  */
 class TunnelManager(private val vpnService: OptimizerVpnService) {
 
@@ -39,18 +30,7 @@ class TunnelManager(private val vpnService: OptimizerVpnService) {
 
     /**
      * Start the VPN tunnel.
-     *
-     * 1. Ask the VpnService to establish the TUN interface with the
-     *    configured DNS server and excluded apps.
-     * 2. Initialize the native Rust tunnel engine.
-     * 3. Configure DNS-over-HTTPS endpoint in the native layer.
-     * 4. Run the blocking tunnel event loop.
-     *
-     * The TUN interface uses:
-     * - IPv4: 10.0.0.2/32
-     * - IPv6: fe80::2/128
-     * - Routes: all traffic (0.0.0.0/0, ::/0)
-     * - DNS: the upstream IP of the DoH resolver
+     * MVP: Returns immediately with false — native tunnel unavailable.
      */
     suspend fun startTunnel(
         dnsEndpoint: String = "https://1.1.1.1/dns-query",
@@ -58,56 +38,10 @@ class TunnelManager(private val vpnService: OptimizerVpnService) {
         excludedApps: List<String> = emptyList(),
     ): Boolean = withContext(Dispatchers.IO) {
         try {
-            // 1. Load native library
-            if (!NativeTunnel.loadLibrary()) {
-                _status.postValue(TunnelStatus.Error("Native library not loaded"))
-                return@withContext false
-            }
-
-            // 2. Establish the TUN interface via the VpnService
-            val vpnInterface = vpnService.establishTunnel(
-                dnsServer = dnsUpstreamIp,
-                excludedApps = excludedApps,
-            )
-            if (vpnInterface == null) {
-                _status.postValue(TunnelStatus.Error("Failed to establish VPN interface"))
-                return@withContext false
-            }
-
-            // 3. Initialize native tunnel engine
-            tunnelHandle = NativeTunnel.initTunnel()
-            if (tunnelHandle == 0L) {
-                vpnInterface.close()
-                _status.postValue(TunnelStatus.Error("Native tunnel init failed"))
-                return@withContext false
-            }
-
-            // 4. Configure DNS in the native layer
-            NativeTunnel.setDnsOverride(
-                tunnelHandle,
-                dnsEndpoint,
-                dnsUpstreamIp,
-                enabled = true,
-            )
-
-            _isRunning.postValue(true)
-            _status.postValue(TunnelStatus.Running)
-
-            // 5. Start the tunnel event loop (blocking — runs on IO dispatcher)
-            // Extract the raw file descriptor integer from the ParcelFileDescriptor
-            val fd = vpnInterface.fileDescriptor.hashCode()
-            val result = NativeTunnel.runTunnel(tunnelHandle, fd)
-
-            // The loop has exited (either via shutdown or error)
-            _isRunning.postValue(false)
-            if (result != 0) {
-                _status.postValue(TunnelStatus.Error("Tunnel exited with code $result"))
-            } else {
-                _status.postValue(TunnelStatus.Stopped)
-            }
-
-            vpnInterface.close()
-            true
+            // MVP: Native library not available
+            Log.w(TAG, "Tunnel disabled in MVP mode — native library unavailable")
+            _status.postValue(TunnelStatus.Error("VPN temporariamente indisponível. Em breve!"))
+            false
         } catch (e: Exception) {
             Log.e(TAG, "Tunnel error: ${e.message}", e)
             _status.postValue(TunnelStatus.Error(e.message ?: "Unknown error"))
@@ -117,12 +51,10 @@ class TunnelManager(private val vpnService: OptimizerVpnService) {
 
     /**
      * Stop the tunnel gracefully.
-     * Signals the native loop to exit via a shutdown flag.
+     * MVP: No-op.
      */
     fun stopTunnel() {
-        if (tunnelHandle != 0L) {
-            NativeTunnel.shutdownTunnel(tunnelHandle)
-        }
+        Log.w(TAG, "stopTunnel called — no native tunnel to stop (MVP mode)")
         _isRunning.postValue(false)
         _status.postValue(TunnelStatus.Stopped)
     }
