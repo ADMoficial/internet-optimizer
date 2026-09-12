@@ -1,0 +1,18 @@
+// Settings file for the Internet Optimizer project.
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "Internet Optimizer"
+include ':app'

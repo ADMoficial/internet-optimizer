@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Color scheme — Material 3 tonal palette -->
+    <color name="md_theme_light_primary">#006E7F</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_secondary">#4A637B</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_background">#F8F9FA</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_onBackground">#1A1A1A</color>
+    <color name="md_theme_light_surfaceVariant">#E8EBED</color>
+
+    <!-- Dark theme -->
+    <color name="md_theme_dark_primary">#4DCEF9</color>
+    <color name="md_theme_dark_onPrimary">#00303F</color>
+    <color name="md_theme_dark_secondary">#81B3D2</color>
+    <color name="md_theme_dark_onSecondary">#00354F</color>
+    <color name="md_theme_dark_background">#121212</color>
+    <color name="md_theme_dark_surface">#1E1E1E</color>
+    <color name="md_theme_dark_onBackground">#E0E0E0</color>
+    <color name="md_theme_dark_surfaceVariant">#373737</color>
+
+    <!-- Aliases -->
+    <color name="primary">#006E7F</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="secondary">#4A637B</color>
+    <color name="background">#F8F9FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="onBackground">#1A1A1A</color>
+    <color name="surfaceVariant">#E8EBED</color>
+    <color name="outline">#CCCCCC</color>
+
+</resources>

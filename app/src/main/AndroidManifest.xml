@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.internetoptimizer">
+
+    <!-- Permissions required by the app -->
+    <!-- INTERNET: needed for the app's own HTTP requests (DNS checks, config updates, speed tests) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- ACCESS_NETWORK_STATE: check connectivity before running tests -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- ACCESS_WIFI_STATE: get detailed network info for diagnostics -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- FOREGROUND_SERVICE: required to keep the VpnService running as a
+         foreground service on Android 8+ (prevents the system from
+         killing the tunnel when the app is backgrounded) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <!-- RECEIVE_BOOT_COMPLETED: restart the tunnel after device reboot
+         if the user enabled auto-start -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:name=".app.OptimizerApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.InternetOptimizer"
+        android:requestLegacyExternalStorage="false">
+
+        <!-- Main activity -->
+        <activity
+            android:name=".app.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.InternetOptimizer.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- VPN Service (must be declared with BIND_VPN_SERVICE permission) -->
+        <service
+            android:name=".tunnel.OptimizerVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="false"
+            android:label="@string/vpn_service_name">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
+        <!-- Tunnel foreground service (hosts the native tunnel loop) -->
+        <service
+            android:name=".tunnel.TunnelService"
+            android:permission="android.permission.FOREGROUND_SERVICE"
+            android:exported="false"
+            android:label="@string/tunnel_service_name" />
+
+        <!-- Boot receiver for auto-start -->
+        <receiver
+            android:name=".app.BootReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

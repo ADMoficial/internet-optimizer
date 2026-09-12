@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Launcher icon foreground layer — a speedometer/gauge design indicating
+  "internet optimization". White on a transparent background.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Gauge circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54 14C32.5 14 14 32.5 14 54s18.5 40 40 40 40-18.5 40-40-18.5-40-40-40zm0 72c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"
+        android:trimPathEnd="1"
+        android:trimPathStart="0" />
+
+    <!-- Needle -->
+    <path
+        android:fillColor="#FFEB3B"
+        android:pathData="M54 38c-.55 0-1 .45-1 1v12.68c0 .28.12.54.32.72l6.68 6.68c.39.39 1.03.45 1.48.13.45-.32.57-.96.29-1.45l-6.19-6.19C55.77 54.87 55.88 54.68 55.88 54.4V39c0-.55-.45-1-1-1z"
+        android:trimPathEnd="1"
+        android:trimPathStart="0" />
+</vector>

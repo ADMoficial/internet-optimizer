@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Typography -->
+    <style name="Text.Headline" parent="androidx.textAppearance.headlineMedium">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="textColor">?attr/colorOnBackground</item>
+    </style>
+
+    <!-- App theme — Material 3 -->
+    <style name="Theme.InternetOptimizer" parent="android:Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">?attr/colorPrimary</item>
+        <item name="colorOnPrimary">?attr/colorOnPrimary</item>
+        <item name="colorSecondary">?attr/colorSecondary</item>
+        <item name="android:windowBackground">?attr/colorBackground</item>
+        <item name="materialAlertDialogBodyTextStyle">?attr/textAppearanceBodyMedium</item>
+    </style>
+
+    <style name="Theme.InternetOptimizer.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowFullscreen">true</item>
+        <item name="windowContentOverlay">null</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+</resources>

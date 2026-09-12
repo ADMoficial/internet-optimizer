@@ -1,0 +1,34 @@
+# Build outputs
+build/
+app/build/
+*.apk
+*.aab
+
+# Gradle
+.gradle/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local config (contains SDK path)
+local.properties
+
+# IDE
+.idea/
+*.iml
+
+# Test artifacts
+test.o
+test
+
+# CMake
+app/.cxx/
+app/build/intermediates/
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

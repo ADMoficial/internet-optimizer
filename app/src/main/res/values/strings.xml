@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- App name -->
+    <string name="app_name">Internet Optimizer</string>
+
+    <!-- Service names -->
+    <string name="vpn_service_name">Otimizador de Internet</string>
+    <string name="tunnel_service_name">Túnel de Otimização</string>
+
+    <!-- UI strings -->
+    <string name="toggle_on">Ativado</string>
+    <string name="toggle_off">Desativado</string>
+    <string name="status_connecting">Conectando...</string>
+    <string name="status_running">Otimizando conexão</string>
+    <string name="status_stopped">Pronto para otimizar</string>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Configurações</string>
+    <string name="dns_section_title">DNS sobre HTTPS</string>
+    <string name="dns_endpoint_label">Endpoint DoH</string>
+    <string name="dns_endpoint_hint">https://1.1.1.1/dns-query</string>
+    <string name="dns_ip_label">IP DNS primário</string>
+    <string name="dns_ip_hint">1.1.1.1</string>
+
+    <string name="proxy_section_title">Proxy (opcional)</string>
+    <string name="proxy_type_socks5">SOCKS5</string>
+    <string name="proxy_type_http">HTTP CONNECT</string>
+    <string name="proxy_host_label">Host / IP</string>
+    <string name="proxy_port_label">Porta</string>
+
+    <string name="auto_start_label">Iniciar automaticamente após reboot</string>
+    <string name="telemetry_label">Telemetria (opcional — ajude a melhorar o app)</string>
+
+    <!-- Excluded apps -->
+    <string name="excluded_apps_title">Apps excluídos</string>
+    <string name="excluded_apps_prompt">Gerenciar apps excluídos</string>
+    <string name="excluded_apps_count">apps excluídos</string>
+
+    <!-- Speed test -->
+    <string name="speed_test_title">Teste de Velocidade</string>
+    <string name="speed_test_before">Antes</string>
+    <string name="speed_test_after">Depois</string>
+    <string name="speed_test_run">Executar teste</string>
+    <string name="speed_test_latency">Latência</string>
+    <string name="speed_test_throughput">Velocidade</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">Túnel de Otimização</string>
+    <string name="notification_channel_desc">O túnel de otimização de internet está ativo</string>
+    <string name="notification_content_running">Otimizando sua conexão...</string>
+    <string name="notification_action_stop">Desligar</string>
+
+    <!-- Errors -->
+    <string name="error_native_load">Falha ao carregar biblioteca nativa</string>
+    <string name="error_vpn_permission">Permissão de VPN necessária para ativar o túnel</string>
+    <string name="error_tun_establish">Falha ao estabelecer interface TUN</string>
+
+    <!-- Privacy -->
+    <string name="privacy_policy_url">https://github.com/internet-optimizer/privacy</string>
+    <string name="privacy_summary">Nenhum dado pessoal é coletado. Telemetria opcional e anônima.</string>
+
+</resources>

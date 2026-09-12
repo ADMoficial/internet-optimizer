@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Adaptive icon (Android 8+). The foreground layer shows a simplified
+  speedometer/gauge icon, and the background uses the primary color.
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/md_theme_light_primary" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
