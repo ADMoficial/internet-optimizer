@@ -1,0 +1,20 @@
+[package]
+name = "tun_interface"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+# cdylib produces a .so loadable by Android JNI
+crate-type = ["cdylib"]
+
+[dependencies]
+# No external crates — pure std implementation to keep the binary small
+# and self-contained. All packet parsing/serialization uses only the
+# Rust standard library.
+
+[profile.release]
+lto = true
+opt-level = "z"
+codegen-units = 1
+panic = "abort"
+strip = true
