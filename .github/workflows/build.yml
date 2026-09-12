@@ -44,8 +44,8 @@ jobs:
           yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
           # Install required packages using absolute path
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools"
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-35"
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;35.0.0"
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-36"
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;36.0.0"
 
       - name: Build Android APK
         run: |
