@@ -21,16 +21,29 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v4
-        with:
-          cmdline-tools-version: 8512546
-          packages: |
-            platform-tools
-            platforms;android-35
-            build-tools;35.0.0
-
-      - name: Accept Android SDK licenses
-        run: yes | sdkmanager --licenses || true
+        run: |
+          # Download and install commandline-tools
+          cd "$HOME"
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
+          mkdir -p cmdline-tools
+          unzip -q cmdline-tools.zip -d cmdline-tools
+          mkdir -p cmdline-tools/cmdline-tools
+          mv cmdline-tools/cmdline-tools/* cmdline-tools/cmdline-tools/ 2>/dev/null || true
+          # OR: the zip extracts to cmdline-tools/bin/, so we restructure
+          # Actually the zip extracts to a single directory, let's handle it properly
+          rm -rf cmdline-tools
+          mkdir -p $HOME/android-sdk/cmdline-tools/latest
+          unzip -q cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools/latest
+          # Set environment variables
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          # Accept licenses
+          yes | sdkmanager --licenses || true
+          # Install required packages as separate commands
+          sdkmanager "platform-tools"
+          sdkmanager "platforms;android-35"
+          sdkmanager "build-tools;35.0.0"
 
       - name: Build Android APK
         run: |
