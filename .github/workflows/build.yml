@@ -22,28 +22,30 @@ jobs:
 
       - name: Setup Android SDK
         run: |
-          # Download and install commandline-tools
+          # Download commandline-tools
           cd "$HOME"
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
-          mkdir -p cmdline-tools
-          unzip -q cmdline-tools.zip -d cmdline-tools
-          mkdir -p cmdline-tools/cmdline-tools
-          mv cmdline-tools/cmdline-tools/* cmdline-tools/cmdline-tools/ 2>/dev/null || true
-          # OR: the zip extracts to cmdline-tools/bin/, so we restructure
-          # Actually the zip extracts to a single directory, let's handle it properly
-          rm -rf cmdline-tools
+          # The zip extracts to a folder named "cmdline-tools" containing "bin/"
+          # We need $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
           mkdir -p $HOME/android-sdk/cmdline-tools/latest
           unzip -q cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools/latest
+          # The zip contents are: cmdline-tools/bin/, cmdline-tools/lib/
+          # So we need to move cmdline-tools/cmdline-tools/* to cmdline-tools/latest/
+          if [ -d "$HOME/android-sdk/cmdline-tools/latest/cmdline-tools" ]; then
+            mv "$HOME/android-sdk/cmdline-tools/latest/cmdline-tools"/* "$HOME/android-sdk/cmdline-tools/latest/"
+            rmdir "$HOME/android-sdk/cmdline-tools/latest/cmdline-tools" 2>/dev/null || true
+          fi
           # Set environment variables
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
           echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+          # Use absolute path to sdkmanager
           echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          # Accept licenses
-          yes | sdkmanager --licenses || true
-          # Install required packages as separate commands
-          sdkmanager "platform-tools"
-          sdkmanager "platforms;android-35"
-          sdkmanager "build-tools;35.0.0"
+          # Accept licenses using absolute path
+          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          # Install required packages using absolute path
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools"
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-35"
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;35.0.0"
 
       - name: Build Android APK
         run: |
