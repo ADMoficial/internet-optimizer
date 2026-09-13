@@ -1,6 +1,7 @@
 package com.internetoptimizer.app
 
 import android.content.Intent
+import android.net.VpnService
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
@@ -11,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import com.internetoptimizer.app.ConfigManager
 import com.internetoptimizer.network.NetworkClient
 import com.internetoptimizer.network.SpeedTest
-import com.internetoptimizer.tunnel.NativeTunnel
 import com.internetoptimizer.tunnel.OptimizerVpnService
 import com.internetoptimizer.tunnel.TunnelService
 import com.internetoptimizer.ui.MainScreen
@@ -42,15 +42,13 @@ class MainActivity : ComponentActivity() {
     // the system dialog asking for permission to create a VPN.
     private val vpnPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) {
-        // After the user grants permission (or cancels), check if we can proceed
-        val intent = android.net.VpnService.prepare(this)
-        if (intent != null) {
-            // User denied — guide them to settings
-            Toast.makeText(this, "Permissão de VPN necessária", Toast.LENGTH_LONG).show()
-        } else {
+    ) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
             // Permission granted — start the tunnel
             startTunnelService()
+        } else {
+            // User denied — guide them to settings
+            Toast.makeText(this, "Permissão de VPN necessária", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -62,9 +60,6 @@ class MainActivity : ComponentActivity() {
         networkClient = NetworkClient(this)
         speedTest = SpeedTest(networkClient)
         viewModel = MainViewModel(configManager)
-
-        // Load native library early (needed for tunnel)
-        NativeTunnel.loadLibrary()
 
         // Observe UI state and render the appropriate screen
         lifecycleScope.launch {
@@ -102,11 +97,13 @@ class MainActivity : ComponentActivity() {
         if (isCurrentlyActive) {
             stopTunnelService()
         } else {
-            // Request VPN permission first
-            val intent = android.net.VpnService.prepare(this)
+            // Request VPN permission first via VpnService.prepare()
+            val intent = VpnService.prepare(this)
             if (intent != null) {
+                // Need to show the prepare dialog - launch it
                 vpnPermissionLauncher.launch(intent)
             } else {
+                // Already prepared or no prepare needed
                 startTunnelService()
             }
         }
@@ -132,7 +129,11 @@ class MainActivity : ComponentActivity() {
         val serviceIntent = Intent(this, TunnelService::class.java).apply {
             action = TunnelService.ACTION_STOP
         }
-        startService(serviceIntent)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            stopForegroundService(serviceIntent)
+        } else {
+            stopService(serviceIntent)
+        }
         Toast.makeText(this, "Otimização desativada", Toast.LENGTH_SHORT).show()
     }
 
