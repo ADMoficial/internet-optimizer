@@ -73,7 +73,7 @@ class OptimizerVpnService : VpnService() {
         excludedApps: List<String> = emptyList(),
     ): ParcelFileDescriptor? {
         return try {
-            val builder = Builder()
+            val builder = VpnService.Builder()
                 .setSession("Internet Optimizer")
                 .setMtu(1500)
                 .addAddress("10.0.0.2", 32)

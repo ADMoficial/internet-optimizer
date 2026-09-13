@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -170,8 +171,13 @@ class TunnelService : Service(), CoroutineScope {
                 .addAction(
                     android.R.drawable.ic_delete,
                     getString(R.string.notification_action_stop),
-                    Intent(ACTION_STOP).setClassName(
-                        packageName, TunnelService::class.java.name
+                    PendingIntent.getActivity(
+                        this,
+                        0,
+                        Intent(ACTION_STOP).setClassName(
+                            packageName, TunnelService::class.java.name
+                        ),
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     ),
                 )
         } else {
