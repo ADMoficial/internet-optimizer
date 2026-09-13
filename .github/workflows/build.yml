@@ -22,7 +22,7 @@ jobs:
 
       - name: Setup Android SDK
         run: |
-          # Download commandline-tools
+          # Install Android commandline-tools
           cd "$HOME"
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
           mkdir -p $HOME/android-sdk/cmdline-tools/latest
@@ -39,13 +39,23 @@ jobs:
           yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
+          # Verify SDK setup
+          echo "===SDK VERIFICATION==="
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --list 2>/dev/null | grep -E "platforms|build-tools" || true
+          echo "===END_SDK_VERIFICATION==="
+
+      - name: Verify Gradle setup
+        run: |
+          ./gradlew tasks --no-daemon 2>&1 | head -20 || true
+          echo "===GRADLE_READY==="
+
       - name: Build Android APK
         env:
           ANDROID_HOME: $HOME/android-sdk
           ANDROID_SDK_ROOT: $HOME/android-sdk
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon
+          ./gradlew assembleDebug --stacktrace --no-daemon --no-configuration-cache
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
