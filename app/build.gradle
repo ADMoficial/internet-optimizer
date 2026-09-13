@@ -51,6 +51,9 @@ android {
 }
 
 dependencies {
+    // Compose BOM - ensures all compose libraries use compatible versions
+    implementation platform('androidx.compose:compose-bom:2025.04.01')
+
     // Core Android
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
