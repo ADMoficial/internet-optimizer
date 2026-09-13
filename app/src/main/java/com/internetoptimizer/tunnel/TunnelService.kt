@@ -78,6 +78,8 @@ class TunnelService : Service(), CoroutineScope {
                 val vpnIntent = Intent(this, OptimizerVpnService::class.java)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(vpnIntent)
+                } else {
+                    startService(vpnIntent)
                 }
                 startTunnel(intent)
                 startForeground(NOTIFICATION_ID, buildNotification(isRunning = true))
