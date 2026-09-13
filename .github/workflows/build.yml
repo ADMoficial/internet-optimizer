@@ -34,6 +34,8 @@ jobs:
           export ANDROID_HOME=$HOME/android-sdk
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          # Create local.properties so Gradle finds the Android SDK
+          echo "sdk.dir=$HOME/android-sdk" > local.properties
           yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
