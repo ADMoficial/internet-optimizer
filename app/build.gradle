@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace 'com.internetoptimizer'
-    compileSdk 36
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.internetoptimizer"
         minSdk 24      // Android 7.0 — VpnService is stable
-        targetSdk 36
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
