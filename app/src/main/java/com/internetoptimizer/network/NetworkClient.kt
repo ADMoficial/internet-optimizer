@@ -137,9 +137,9 @@ class NetworkClient(private val context: Context) {
                 var totalBytes = 0L
                 response.body?.byteStream()?.use { input ->
                     val buffer = ByteArray(8192)
-                    var read: Int
-                    while (input.read().also { read = it } != -1) {
-                        totalBytes += read.toLong()
+                    var bytesRead: Int
+                    while (input.read(buffer).also { bytesRead = it } != -1) {
+                        totalBytes += bytesRead.toLong()
                     }
                 } ?: run {
                     return@withContext ThroughputResult(

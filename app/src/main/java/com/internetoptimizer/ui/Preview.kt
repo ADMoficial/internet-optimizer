@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
  * These allow design-time preview in Android Studio without requiring
  * a running device.
  */
-@Preview(showBackground = true, widthPx = 1080, heightPx = 2340)
+@Preview(showBackground = true, widthDp = 1080, heightDp = 2340)
 @Composable
 fun MainScreenPreview() {
     MainScreen(
@@ -26,7 +26,7 @@ fun MainScreenPreview() {
     )
 }
 
-@Preview(showBackground = true, widthPx = 1080, heightPx = 2340)
+@Preview(showBackground = true, widthDp = 1080, heightDp = 2340)
 @Composable
 fun MainScreenActivePreview() {
     MainScreen(
