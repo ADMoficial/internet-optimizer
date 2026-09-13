@@ -21,26 +21,17 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Android SDK
-        run: |
-          # Install Android commandline-tools
-          cd "$HOME"
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
-          mkdir -p $HOME/android-sdk/cmdline-tools/latest
-          unzip -q cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools/latest
-          if [ -d "$HOME/android-sdk/cmdline-tools/latest/cmdline-tools" ]; then
-            mv "$HOME/android-sdk/cmdline-tools/latest/cmdline-tools"/* "$HOME/android-sdk/cmdline-tools/latest/"
-            rmdir "$HOME/android-sdk/cmdline-tools/latest/cmdline-tools" 2>/dev/null || true
-          fi
-          export ANDROID_HOME=$HOME/android-sdk
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
-          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+        uses: android-actions/setup-android@v4
+        with:
+          packages: |
+            platform-tools
+            platforms;android-36
+            build-tools;36.0.0
 
       - name: Build Android APK
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
