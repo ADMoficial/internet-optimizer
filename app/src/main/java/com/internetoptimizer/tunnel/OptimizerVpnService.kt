@@ -2,6 +2,7 @@ package com.internetoptimizer.tunnel
 
 import android.content.Intent
 import android.net.VpnService
+import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.util.Log
 
@@ -74,7 +75,6 @@ class OptimizerVpnService : VpnService() {
     ): ParcelFileDescriptor? {
         return try {
             val builder = Builder()
-                .setSession("Internet Optimizer")
                 .setMtu(1500)
                 .addAddress("10.0.0.2", 32)
                 .addAddress("fe80::2", 128)
@@ -82,6 +82,11 @@ class OptimizerVpnService : VpnService() {
                 .addRoute("::", 0)       // All IPv6 traffic
                 .addDnsServer(dnsServer)
                 .setBlocking(true)
+
+            // setSession is available from API 28+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                builder.setSession("Internet Optimizer")
+            }
 
             // Exclude specific apps from the tunnel (e.g. banking apps)
             for (pkg in excludedApps) {
