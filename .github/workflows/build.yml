@@ -55,7 +55,11 @@ jobs:
           ANDROID_SDK_ROOT: $HOME/android-sdk
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon --no-configuration-cache
+          ./gradlew assembleDebug --stacktrace --no-daemon --no-configuration-cache 2>&1 | tee /tmp/gradle_output.txt || true
+          # Upload build log for debugging
+          echo "===GRADLE_BUILD_LOG==="
+          cat /tmp/gradle_output.txt || true
+          echo "===END_GRADLE_BUILD_LOG==="
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
