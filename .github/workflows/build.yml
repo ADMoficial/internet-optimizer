@@ -59,10 +59,10 @@ jobs:
           echo "===GRADLE_BUILD_LOG==="
           cat /tmp/gradle_output.txt || true
           echo "===END_GRADLE_BUILD_LOG==="
-          # Find and list all APKs to discover actual path
-          echo "===FIND_APKS==="
-          find . -name "*.apk" -type f
-          echo "===END_FIND_APKS==="
+          # Find all APK and AAB files to discover actual output location
+          echo "===FIND_OUTPUT_FILES==="
+          find . -name "*.apk" -o -name "*.aab" 2>/dev/null
+          echo "===END_FIND_OUTPUT_FILES==="
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
