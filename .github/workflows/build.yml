@@ -56,13 +56,17 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew assembleDebug --stacktrace --no-daemon --no-configuration-cache 2>&1 | tee /tmp/gradle_output.txt || true
-          # Upload build log for debugging
           echo "===GRADLE_BUILD_LOG==="
           cat /tmp/gradle_output.txt || true
           echo "===END_GRADLE_BUILD_LOG==="
+          # Find and list all APKs to discover actual path
+          echo "===FIND_APKS==="
+          find . -name "*.apk" -type f
+          echo "===END_FIND_APKS==="
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: |
+            app/build/outputs/apk/debug/**/*.apk
