@@ -52,6 +52,7 @@ jobs:
           ANDROID_HOME: $HOME/android-sdk
           ANDROID_SDK_ROOT: $HOME/android-sdk
         run: |
+          set -o pipefail
           chmod +x ./gradlew
           ./gradlew assembleDebug --stacktrace --no-daemon --no-configuration-cache 2>&1 | tee /tmp/gradle_output.txt
           echo "===GRADLE_BUILD_LOG==="
