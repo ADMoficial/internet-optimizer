@@ -31,8 +31,6 @@ jobs:
             mv "$HOME/android-sdk/cmdline-tools/latest/cmdline-tools"/* "$HOME/android-sdk/cmdline-tools/latest/"
             rmdir "$HOME/android-sdk/cmdline-tools/latest/cmdline-tools" 2>/dev/null || true
           fi
-          export ANDROID_HOME=$HOME/android-sdk
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
           echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
           # Create local.properties so Gradle finds the Android SDK
           echo "sdk.dir=$HOME/android-sdk" > local.properties
@@ -55,13 +53,14 @@ jobs:
           ANDROID_SDK_ROOT: $HOME/android-sdk
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon --no-configuration-cache 2>&1 | tee /tmp/gradle_output.txt || true
+          ./gradlew assembleDebug --stacktrace --no-daemon --no-configuration-cache 2>&1 | tee /tmp/gradle_output.txt
           echo "===GRADLE_BUILD_LOG==="
           cat /tmp/gradle_output.txt || true
           echo "===END_GRADLE_BUILD_LOG==="
           # Find all APK and AAB files to discover actual output location
           echo "===FIND_OUTPUT_FILES==="
-          find . -name "*.apk" -o -name "*.aab" 2>/dev/null
+          find . -name "*.apk" -type f -print
+          find . -name "*.aab" -type f -print
           echo "===END_FIND_OUTPUT_FILES==="
 
       - name: Upload APK artifact
@@ -69,4 +68,5 @@ jobs:
         with:
           name: app-debug-apk
           path: |
-            app/build/outputs/apk/debug/**/*.apk
+            app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
